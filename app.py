@@ -16,8 +16,9 @@ migrate = Migrate(app, db)
 db.init_app(app)
 
 # registering blueprint
-app.register_blueprint(post_pb, url_prefix='/api/posts')
-app.register_blueprint(user_bp, url_prefix='/api/users')
+app.register_blueprint(user_bp, url_prefix='/api/v1')
+app.register_blueprint(post_pb, url_prefix='/api/v1')
+
 
 @app.route('/')
 def index():

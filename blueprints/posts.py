@@ -3,7 +3,7 @@ from models import db, Post
 
 post_pb = Blueprint('post_pb', __name__)
 
-@post_pb.route('/', methods=['POST', 'GET'])
+@post_pb.route('/posts', methods=['POST', 'GET'])
 def posts():
 
     if request.method == 'GET':
@@ -35,3 +35,18 @@ def get_post_by_id(id):
         return make_response({
             "message" : "post deleted successfully"
         }, 204)
+
+    if request.method == 'PATCH':
+
+        data = request.get_json()
+        for key, value in data.items():
+            setattr(post, key, value)
+
+        db.session.add(post)
+        db.session.commit()
+        
+        return make_response(
+            post.to_dict(),
+            200
+        )
+
