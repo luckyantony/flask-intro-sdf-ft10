@@ -13,8 +13,12 @@ class User(db.Model, SerializerMixin):
     username = db.Column(db.String, unique=True)
     posts = db.relationship('Post', back_populates='user')
 
+    
+
 class Post(db.Model, SerializerMixin):
     __tablename__ = "posts"
+
+    serialize_rules = ("-user.posts",)
 
     id = db.Column(db.Integer, primary_key=True)
     post_title = db.Column(db.String, nullable=False)
@@ -22,8 +26,3 @@ class Post(db.Model, SerializerMixin):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = db.relationship('User', back_populates='posts')
 
-
-# user has many posts
-# post belongs to a user
-
-# foreingKey  => many side

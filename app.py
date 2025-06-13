@@ -1,6 +1,8 @@
-from flask import Flask, make_response
+from flask import Flask, make_response, request
 from flask_migrate import Migrate
 from models import db, User, Post
+from blueprints.posts import post_pb
+from blueprints.users import user_bp
 
 # create the app
 app = Flask(__name__)
@@ -12,6 +14,10 @@ migrate = Migrate(app, db)
 
 # initialize the app with the extension
 db.init_app(app)
+
+# registering blueprint
+app.register_blueprint(post_pb, url_prefix='/api/posts')
+app.register_blueprint(user_bp, url_prefix='/api/users')
 
 @app.route('/')
 def index():
@@ -25,15 +31,10 @@ def about():
 def username(username):
     return f'Hello {username}'
 
-@app.route('/posts')
-def posts():
-    # list of python dictionary
-    posts = [post.to_dict() for post in Post.query.all()]
 
-    return make_response(posts)
+
+
     
-
-
 if __name__ == '__main__':
     app.run(debug=True, port=4000)
 
